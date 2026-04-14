@@ -224,8 +224,8 @@ export default function StudentProfilePage() {
     if (!student) return;
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.width;
-    const primaryColor = [26, 35, 126];
-    const accentColor = [63, 81, 181];
+    const primaryColor: [number, number, number] = [26, 35, 126];
+    const accentColor: [number, number, number] = [63, 81, 181];
     const formatCurrency = (val: any) => `INR ${parseFloat(val || "0").toLocaleString('en-IN')}`;
 
     doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
