@@ -144,7 +144,7 @@ export default function StudentProfilePage() {
   });
 
   const getAvailableSecurity = () => {
-    return parseFloat(student?.security_balance as any || "0");
+    return parseFloat(student?.security_balance?.toString() || "0");
   };
 
   const fetchStudentData = useCallback(async () => {
@@ -177,10 +177,10 @@ export default function StudentProfilePage() {
         setStudent((prev: any) => ({
           ...prev,
           ...feesRes.data.student,
-          monthly_fee: parseFloat(feesRes.data.student.monthly_fee || "0"),
-          security_deposit: parseFloat(feesRes.data.student.security_deposit || "0"),
-          security_balance: parseFloat(feesRes.data.student.security_balance || "0"),
-          total_session_fees: parseFloat(feesRes.data.student.total_session_fees || "0")
+          monthly_fee: Number(feesRes.data.student.monthly_fee || 0),
+          security_deposit: Number(feesRes.data.student.security_deposit || 0),
+          security_balance: Number(feesRes.data.student.security_balance || 0),
+          total_session_fees: Number(feesRes.data.student.total_session_fees || 0)
         }));
       }
 
@@ -283,7 +283,7 @@ export default function StudentProfilePage() {
     drawLabelValue("Contact", student.phone, 20, y);
     drawLabelValue("Transaction ID", fee.installment_name === 'Overpayment Credit' ? '—' : (fee.transaction_id || '—'), 110, y);
     y += 7;
-    const jDate = new Date(student.joining_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    const jDate = new Date(student.joining_date || Date.now()).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
     drawLabelValue("Joining Date", jDate, 20, y);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(100, 100, 100);
@@ -458,7 +458,14 @@ export default function StudentProfilePage() {
                       <div className="text-left"><p className="text-[9px] md:text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-0.5">ROOM ASSIGNED</p><p className="text-xl md:text-2xl font-black text-slate-900">{student.room_number || 'N/A'}{student.assigned_slot?.slice(-1)}</p></div>
                     </div>
                     <div className="grid grid-cols-2 gap-x-4 md:gap-x-8 gap-y-3 md:gap-y-4 text-left">
-                      <div><p className="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">ROOM SEATER</p><p className="text-[11px] md:text-xs font-black text-slate-700">{student.room_capacity ? `${student.room_capacity} Seater` : (student.details?.room_capacity || 'N/A')}</p></div>
+                      <div>
+  <p className="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">
+    ROOM SEATER
+  </p>
+  <p className="text-[11px] md:text-xs font-black text-slate-700">
+    {student.room_capacity ? `${student.room_capacity} Seater` : 'N/A'}
+  </p>
+</div>
                       <div><p className="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">CATEGORY</p><p className="text-[11px] md:text-xs font-black text-slate-700 truncate">{student.room_type || (student.details?.room_category || 'N/A')}</p></div>
                       <div><p className="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">FLOOR</p><p className="text-[11px] md:text-xs font-black text-emerald-600">{student.floor || 'Ground Floor'}</p></div>
                       <div><p className="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">JOINING DATE</p><p className="text-[11px] md:text-xs font-black text-slate-700">{new Date(student.joining_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</p></div>
