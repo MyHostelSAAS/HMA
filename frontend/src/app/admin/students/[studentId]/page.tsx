@@ -327,7 +327,7 @@ export default function StudentProfilePage() {
       head: [['Sr', 'Description', 'Due Date', 'Plan Amount', 'Adjustment', 'Paid', 'Date', 'Method', 'Status']],
       body: [['1', isOverpayment ? 'OVERPAYMENT CREDIT' : (fee.installment_name || fee.month || 'Fee Entry'), new Date(fee.due_date).toLocaleDateString('en-GB'), isOverpayment ? '—' : formatCurrency(fee.amount), securityAdjustment !== 0 ? formatCurrency(securityAdjustment) : '—', formatCurrency(fee.paid_amount), fee.payment_date ? new Date(fee.due_date).toLocaleDateString('en-GB') : '—', fee.payment_method || '—', isOverpayment ? 'CREDITED' : displayStatus]],
       theme: 'striped',
-      headStyles: { fillColor: primaryColor, textColor: [255, 255, 255], fontStyle: 'bold', halign: 'center' },
+      headStyles: { fillColor: [41, 128, 185], textColor: [255, 255, 255], fontStyle: 'bold', halign: 'center' },
       columnStyles: { 3: { halign: 'right' }, 4: { halign: 'right' }, 5: { halign: 'right' }, 0: { halign: 'center' }, 8: { halign: 'center' } },
       styles: { fontSize: 8, cellPadding: 4 }
     });
