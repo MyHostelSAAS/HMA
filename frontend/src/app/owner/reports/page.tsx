@@ -172,8 +172,7 @@ const ReportsPage = () => {
         // Footer
         doc.setFontSize(7);
         doc.setTextColor(148, 163, 184);
-        const totalPages = (doc as any).internal.getNumberOfPages();
-        const str = `Page ${totalPages}`;
+        const str = `Page ${(doc as any).internal.getNumberOfPages()}`;
         doc.text(str, pageWidth - 20, pageHeight - 10);
         doc.text(`Audit generated on ${new Date().toLocaleString()}`, 14, pageHeight - 10);
       }
