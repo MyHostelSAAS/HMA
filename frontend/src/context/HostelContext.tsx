@@ -6,6 +6,7 @@ import api from '@/lib/api';
 interface Hostel {
   hostel_id: number;
   hostel_name: string;
+  address?: string;
 }
 
 interface HostelContextType {
