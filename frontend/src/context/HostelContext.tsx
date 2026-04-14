@@ -7,6 +7,8 @@ interface Hostel {
   hostel_id: number;
   hostel_name: string;
   address?: string;
+  total_rooms?: number;
+  calculated_capacity?: number;
 }
 
 interface HostelContextType {
