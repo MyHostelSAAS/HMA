@@ -416,7 +416,7 @@ export default function StudentProfilePage() {
     if (!student) return;
     
     const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.width;
+    const pageWidth = (doc as any).internal.pageSize.width;
     const primaryColor = [26, 35, 126]; // Dark Blue
     const accentColor = [63, 81, 181]; // Indigo
     

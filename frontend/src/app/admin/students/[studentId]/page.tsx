@@ -223,7 +223,7 @@ export default function StudentProfilePage() {
   const downloadReceipt = (fee: FeeRecord) => {
     if (!student) return;
     const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.width;
+    const pageWidth = (doc as any).internal.pageSize.width;
     const primaryColor: [number, number, number] = [26, 35, 126];
     const accentColor: [number, number, number] = [63, 81, 181];
     const formatCurrency = (val: any) => `INR ${parseFloat(val || "0").toLocaleString('en-IN')}`;
