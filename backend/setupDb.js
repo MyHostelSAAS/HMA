@@ -4,11 +4,11 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const client = new Client({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
+  user: 'postgres',
+  host: 'localhost',
   database: 'postgres', // Connect to default postgres DB first
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  password: 'password', // try default
+  port: 5432,
 });
 
 async function setup() {

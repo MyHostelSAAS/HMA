@@ -4,6 +4,16 @@ const db = require('../config/db');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 const bcrypt = require('bcryptjs');
 const { logAction } = require('../utils/logger');
+const nodemailer = require('nodemailer');
+
+// Email Transporter (Reuse logic from auth.js if needed, but defining here for stability)
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 // --- CRITICAL DETAIL ROUTES (Must be at the top) ---
 
@@ -1143,25 +1153,80 @@ router.put('/:hostelId', authenticateToken, authorizeRoles('admin'), async (req,
 
 // Admin only: Update Owner
 router.put('/owners/:ownerId', authenticateToken, authorizeRoles('admin'), async (req, res) => {
-  const { name, email, phone, aadhaar, address, password } = req.body;
+  const { name, email, phone, aadhaar, address } = req.body;
+  const ownerId = parseInt(req.params.ownerId);
+
   try {
-    let hashedPassword = null;
-    if (password) {
-      const salt = await bcrypt.genSalt(10);
-      hashedPassword = await bcrypt.hash(password, salt);
+    // 1. Fetch current owner details for audit and comparison
+    const currentOwnerRes = await db.query('SELECT * FROM owners WHERE owner_id = $1', [ownerId]);
+    if (currentOwnerRes.rows.length === 0) return res.status(404).json({ error: 'Owner not found' });
+    const oldOwner = currentOwnerRes.rows[0];
+
+    // 2. If email is changing, check for duplicates in all user tables
+    if (email !== oldOwner.email) {
+      const emailCheck = await db.query(`
+        SELECT email FROM admins WHERE email = $1
+        UNION
+        SELECT email FROM owners WHERE email = $1
+        UNION
+        SELECT email FROM wardens WHERE email = $1
+      `, [email]);
+
+      if (emailCheck.rows.length > 0) {
+        return res.status(400).json({ error: 'This email is already registered in the system.' });
+      }
     }
 
+    // 3. Update the owner record
     const result = await db.query(
-      'UPDATE owners SET name = $1, email = $2, phone = $3, aadhaar = $4, address = $5, password = $6 WHERE owner_id = $7 RETURNING *',
-      [name, email, phone, aadhaar, address, hashedPassword, parseInt(req.params.ownerId)]
+      'UPDATE owners SET name = $1, email = $2, phone = $3, aadhaar = $4, address = $5 WHERE owner_id = $6 RETURNING *',
+      [name, email, phone, aadhaar, address, ownerId]
     );
 
-    // Record system log
-    await logAction('admin', req.user.id, `Updated owner: ${name}`, 'owner');
+    // 4. Record system log (Audit Log)
+    let actionDetail = `Updated owner: ${name}`;
+    if (email !== oldOwner.email) {
+      actionDetail += ` (Email changed from ${oldOwner.email} to ${email})`;
+    }
+    await logAction('admin', req.user.id, actionDetail, 'owner');
+
+    // 5. Send confirmation email if email was updated
+    if (email !== oldOwner.email) {
+      try {
+        const mailOptions = {
+          from: `"My Hostel System" <${process.env.EMAIL_USER}>`,
+          to: email,
+          subject: 'Security Alert: Your Login Email has been Updated',
+          html: `
+            <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; border: 1px solid #eee; border-radius: 10px;">
+              <h2 style="color: #2563eb;">Account Security Update</h2>
+              <p>Hello <strong>${name}</strong>,</p>
+              <p>This is an automated confirmation that your login email address for the <strong>My Hostel Portal</strong> has been updated by the System Administrator.</p>
+              
+              <div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                <p style="margin: 5px 0;"><strong>New Login Email:</strong> ${email}</p>
+                <p style="margin: 5px 0;"><strong>Update Date:</strong> ${new Date().toLocaleString()}</p>
+              </div>
+
+              <p>Please use this new email address for all future logins. Your password remains unchanged.</p>
+              
+              <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+              <p style="font-size: 12px; color: #666;">If you believe this change was made in error, please contact support immediately at support@myhostel.com.</p>
+            </div>
+          `,
+        };
+        await transporter.sendMail(mailOptions);
+        console.log(`--- EMAIL SENT: Owner Email Update Confirmation to ${email} ---`);
+      } catch (mailErr) {
+        console.error('--- EMAIL FAILED: Owner Email Update Confirmation ---', mailErr);
+        // We don't fail the whole request if email fails, but we log it
+      }
+    }
 
     res.json(result.rows[0]);
   } catch (err) {
-    res.status(400).json({ error: 'Error updating owner' });
+    console.error('Error updating owner:', err);
+    res.status(500).json({ error: 'Server error updating owner' });
   }
 });
 

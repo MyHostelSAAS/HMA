@@ -23,7 +23,8 @@ import {
   Eye,
   EyeOff,
   Fingerprint,
-  MapPin
+  MapPin,
+  AlertTriangle
 } from 'lucide-react';
 
 const OwnerDetails = () => {
@@ -31,12 +32,12 @@ const OwnerDetails = () => {
   const router = useRouter();
   const [owner, setOwner] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [showPassword, setShowPassword] = useState(false);
   
   // Edit Modal State
   const [showEditModal, setShowEditModal] = useState(false);
   const [editForm, setEditForm] = useState<any>(null);
   const [updating, setUpdating] = useState(false);
+  const [emailWarning, setEmailWarning] = useState(false);
 
   useEffect(() => {
     fetchDetails();
@@ -49,7 +50,6 @@ const OwnerDetails = () => {
       setEditForm({
         name: res.data.name,
         email: res.data.email,
-        password: res.data.password || '',
         phone: res.data.phone || '',
         aadhaar: res.data.aadhaar || '',
         address: res.data.address || ''
@@ -63,13 +63,21 @@ const OwnerDetails = () => {
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Check if email is being changed
+    if (editForm.email !== owner.email && !emailWarning) {
+      setEmailWarning(true);
+      return;
+    }
+
     setUpdating(true);
     try {
       await api.put(`hostels/owners/${id}`, editForm);
       setShowEditModal(false);
+      setEmailWarning(false);
       fetchDetails();
-    } catch (err) {
-      alert('Error updating owner details');
+    } catch (err: any) {
+      alert(err.response?.data?.error || 'Error updating owner details');
     } finally {
       setUpdating(false);
     }
@@ -221,22 +229,6 @@ const OwnerDetails = () => {
                     <p className="text-sm font-bold text-slate-900">{owner.phone}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-gray-50 text-gray-600 rounded-xl flex items-center justify-center">
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Password</p>
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-bold text-slate-900">
-                        {showPassword ? owner.password : '********'}
-                      </p>
-                      <button onClick={() => setShowPassword(!showPassword)} className="text-slate-500 hover:text-slate-900">
-                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                      </button>
-                    </div>
-                  </div>
-                </div>
               </div>
             </Card>
 
@@ -333,24 +325,35 @@ const OwnerDetails = () => {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Password (leave blank to keep unchanged)</label>
-                  <input 
-                    type="password"
-                    className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500 font-bold"
-                    value={editForm.password}
-                    onChange={e => setEditForm({...editForm, password: e.target.value})}
-                  />
-                </div>
+                {emailWarning && (
+                  <div className="p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-start gap-3 animate-in slide-in-from-top-2">
+                    <AlertTriangle className="text-amber-600 shrink-0 mt-0.5" size={20} />
+                    <div>
+                      <p className="text-amber-900 font-bold text-sm">Security Warning</p>
+                      <p className="text-amber-700 text-xs font-medium leading-relaxed">
+                        Changing the email address will update the owner's login credentials. They will need to use the new email to sign in. Proceed?
+                      </p>
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex gap-4 pt-4">
                   <button 
                     type="submit" 
                     disabled={updating}
-                    className="flex-1 bg-indigo-600 text-white font-black py-4 rounded-2xl shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                    className={`flex-1 ${emailWarning ? 'bg-amber-600 hover:bg-amber-700 shadow-amber-600/20' : 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/20'} text-white font-black py-4 rounded-2xl shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2`}
                   >
-                    {updating ? <Loader2 className="animate-spin" /> : <><Save size={20} /> Update Owner</>}
+                    {updating ? <Loader2 className="animate-spin" /> : <><Save size={20} /> {emailWarning ? 'Confirm & Update' : 'Update Owner'}</>}
                   </button>
+                  {emailWarning && (
+                    <button 
+                      type="button"
+                      onClick={() => setEmailWarning(false)}
+                      className="px-6 bg-slate-100 text-slate-600 font-bold py-4 rounded-2xl hover:bg-slate-200 transition-all"
+                    >
+                      Cancel
+                    </button>
+                  )}
                 </div>
               </form>
             </div>

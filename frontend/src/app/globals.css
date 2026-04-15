@@ -42,3 +42,14 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #cbd5e1;
 }
+
+/* 
+  Global Mobile UI Fix: 
+  Ensures that main content always clears the fixed mobile header bar in the Sidebar component.
+  This prevents overlapping of the navigation menu with page titles on mobile devices.
+*/
+@media (max-width: 1023px) {
+  main.flex-1 {
+    padding-top: 5rem !important; /* Matches h-20 (80px) in Sidebar mobile header */
+  }
+}

@@ -12,7 +12,7 @@ export default function OwnerLayout({
     <HostelProvider>
       <div className="flex bg-slate-50/50 min-h-screen">
         <Sidebar role="owner" />
-        <main className="flex-1 overflow-y-auto pt-20 lg:pt-0">
+        <main className="flex-1 overflow-y-auto">
           {children}
         </main>
       </div>

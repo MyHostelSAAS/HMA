@@ -89,14 +89,26 @@ const Sidebar = ({ role, hostelName: initialHostelName }: SidebarProps) => {
 
   return (
     <>
-      {/* Mobile Toggle Button - Refined for professional look */}
-      <div className="lg:hidden fixed top-6 left-6 z-[70]">
-        <button
-          onClick={toggleSidebar}
-          className="p-3 bg-slate-900 text-white rounded-2xl shadow-2xl border border-slate-800 hover:bg-slate-800 transition-all active:scale-95 flex items-center justify-center group/toggle"
-        >
-          {isOpen ? <X size={22} /> : <Menu size={22} className="group-hover/toggle:scale-110 transition-transform" />}
-        </button>
+      {/* Mobile Header Bar - Fixed at top to prevent overlapping content during scroll */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-20 bg-white/95 backdrop-blur-xl border-b border-slate-200/60 z-[70] flex items-center justify-between px-6 shadow-sm">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={toggleSidebar}
+            className="p-2.5 bg-slate-900 text-white rounded-xl shadow-lg hover:bg-slate-800 transition-all active:scale-95 flex items-center justify-center group/toggle"
+          >
+            {isOpen ? <X size={20} /> : <Menu size={20} className="group-hover/toggle:scale-110 transition-transform" />}
+          </button>
+          <div className="flex flex-col">
+            <span className="font-black text-lg tracking-tight leading-none text-slate-900">{hostelName || 'My Hostel'}</span>
+            <span className="text-[9px] font-black text-blue-600 uppercase tracking-widest mt-0.5">Management Portal</span>
+          </div>
+        </div>
+        
+        {/* Small subtle indicator of the active portal */}
+        <div className="px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 flex items-center gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{role}</span>
+        </div>
       </div>
 
       {/* Backdrop for Mobile */}

@@ -1,35 +1,54 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { Building2, Mail, Lock, Loader2, User, ChevronDown, Eye, EyeOff } from 'lucide-react';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Building2, Lock, Loader2, Eye, EyeOff } from 'lucide-react';
 import api from '@/lib/api';
 
-const LoginPage = () => {
+const ResetPasswordContent = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
+  const email = searchParams.get('email');
+
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: '',
     password: '',
-    role: 'admin'
+    confirmPassword: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (!token || !email) {
+      setError('Invalid reset link. Please request a new one.');
+    }
+  }, [token, email]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      return setError('Passwords do not match.');
+    }
+
     setLoading(true);
     setError('');
+    setMessage('');
 
     try {
-      const res = await api.post('auth/login', formData);
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(res.data.user));
+      const res = await api.post('auth/reset-password', {
+        token,
+        email,
+        password: formData.password
+      });
+      setMessage(res.data.message);
       
-      router.push(`/${res.data.user.role}`);
+      setTimeout(() => {
+        router.push('/auth/login');
+      }, 3000);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to login. Please try again.');
+      setError(err.response?.data?.error || 'Failed to reset password. Link may be expired.');
     } finally {
       setLoading(false);
     }
@@ -54,29 +73,14 @@ const LoginPage = () => {
           </div>
           <div className="-mt-4">
             <h1 className="text-5xl font-black text-white tracking-tighter drop-shadow-2xl">My Hostel</h1>
-            <p className="text-white/80 font-medium mt-2 text-lg drop-shadow-lg">Secure Login to Your Dashboard</p>
+            <p className="text-white/80 font-medium mt-2 text-lg drop-shadow-lg">Set Your New Password</p>
           </div>
         </div>
 
         <div className="bg-white/10 backdrop-blur-2xl rounded-3xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] p-10 space-y-8 border border-white/20 -mt-4">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label className="block text-sm font-bold text-white/90 uppercase tracking-widest ml-1">Email Address</label>
-              <div className="relative group">
-                <Mail size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-white transition-colors" />
-                <input
-                  type="email"
-                  required
-                  className="block w-full h-14 pl-12 pr-4 py-2 border border-white/10 rounded-2xl bg-white/5 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-white/30 focus:bg-white/10 transition-all text-lg"
-                  placeholder="name@company.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-sm font-bold text-white/90 uppercase tracking-widest ml-1">Password</label>
+              <label className="block text-sm font-bold text-white/90 uppercase tracking-widest ml-1">New Password</label>
               <div className="relative group">
                 <Lock size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-white transition-colors" />
                 <input
@@ -95,30 +99,20 @@ const LoginPage = () => {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              <div className="flex justify-end px-1">
-                <Link 
-                  href="/auth/forgot-password" 
-                  className="text-xs font-bold text-white/40 hover:text-white transition-colors uppercase tracking-widest"
-                >
-                  Forgot Password?
-                </Link>
-              </div>
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-bold text-white/90 uppercase tracking-widest ml-1">Your Role</label>
+              <label className="block text-sm font-bold text-white/90 uppercase tracking-widest ml-1">Confirm Password</label>
               <div className="relative group">
-                <User size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-white transition-colors" />
-                <select
-                  className="block w-full h-14 pl-12 pr-10 py-2 text-lg border-white/10 bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-white/30 focus:bg-white/10 rounded-2xl appearance-none font-medium cursor-pointer transition-all shadow-inner [&>option]:bg-slate-900 [&>option]:text-white"
-                  value={formData.role}
-                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                >
-                  <option value="admin">System Admin</option>
-                  <option value="owner">Hostel Owner</option>
-                  <option value="warden">Hostel Warden</option>
-                </select>
-                <ChevronDown size={20} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 pointer-events-none transition-transform group-focus-within:rotate-180" />
+                <Lock size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-white transition-colors" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  className="block w-full h-14 pl-12 pr-4 py-2 border border-white/10 rounded-2xl bg-white/5 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-white/30 focus:bg-white/10 transition-all text-lg"
+                  placeholder="••••••••"
+                  value={formData.confirmPassword}
+                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                />
               </div>
             </div>
 
@@ -129,18 +123,25 @@ const LoginPage = () => {
               </div>
             )}
 
+            {message && (
+              <div className="p-4 bg-green-500/20 backdrop-blur-md text-green-100 text-sm font-bold rounded-2xl flex items-center gap-3 border border-green-500/30">
+                <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]" />
+                {message}
+              </div>
+            )}
+
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !!message || !token}
               className="w-full h-14 bg-white text-slate-900 font-black text-lg rounded-2xl shadow-[0_10px_20px_-5px_rgba(255,255,255,0.3)] hover:shadow-[0_15px_25px_-5px_rgba(255,255,255,0.4)] hover:-translate-y-1 active:translate-y-0 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
             >
               {loading ? (
                 <>
                   <Loader2 size={24} className="animate-spin" />
-                  Authenticating...
+                  Updating Password...
                 </>
               ) : (
-                'Sign In to Dashboard'
+                'Reset Password'
               )}
             </button>
           </form>
@@ -153,4 +154,12 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+const ResetPasswordPage = () => {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-900 flex items-center justify-center text-white font-bold tracking-widest uppercase">Loading...</div>}>
+      <ResetPasswordContent />
+    </Suspense>
+  );
+};
+
+export default ResetPasswordPage;
