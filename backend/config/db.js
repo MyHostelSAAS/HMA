@@ -3,10 +3,13 @@ require('dotenv').config();
 
 const pool = process.env.DATABASE_URL 
   ? new Pool({
-      connectionString: process.env.DATABASE_URL,
+      connectionString: process.env.DATABASE_URL.replace('5432', '6543'), // Use Supabase Transaction Pooler (Port 6543)
       ssl: {
         rejectUnauthorized: false
-      }
+      },
+      max: 20, // Increase max connections for production
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 2000,
     })
   : new Pool({
       user: process.env.DB_USER || 'postgres',

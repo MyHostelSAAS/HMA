@@ -61,40 +61,29 @@ const WardenDashboard = () => {
       const res = await api.get(`/hostels/warden/${wardenId}`);
       const hostelsData = res.data;
       
-      // Fetch stats and full details for each hostel
+      // Fetch consolidated data for each hostel in parallel
       const hostelsWithStats = await Promise.all(hostelsData.map(async (hostel: any) => {
-        const result = { 
-          ...hostel, 
-          stats: { totalStudents: 0, totalRooms: 0, availableRooms: 0 },
-          room_details: [],
-          rooms: []
-        };
-
         try {
-          const [statsRes, detailsRes, roomsRes, finRes, dueRes] = await Promise.allSettled([
-            api.get(`/hostels/${hostel.hostel_id}/operational-stats`),
-            api.get(`/hostels/${hostel.hostel_id}/details`),
-            api.get(`/hostels/${hostel.hostel_id}/rooms`),
-            api.get(`/finance/stats/${hostel.hostel_id}`),
-            api.get(`/finance/due-alerts/${hostel.hostel_id}`)
-          ]);
+          const summaryRes = await api.get(`/hostels/${hostel.hostel_id}/dashboard-summary`);
+          const data = summaryRes.data;
 
-          if (statsRes.status === 'fulfilled') result.stats = statsRes.value.data;
-          if (detailsRes.status === 'fulfilled') result.room_details = detailsRes.value.data.room_details;
-          if (roomsRes.status === 'fulfilled') result.rooms = roomsRes.value.data;
-          
-          if (finRes.status === 'fulfilled') {
-            setFinanceStats((prev: any) => ({ ...prev, [hostel.hostel_id]: finRes.value.data }));
-          }
-          
-          if (dueRes.status === 'fulfilled') {
-            setDueAlerts(dueRes.value.data);
-          }
+          setFinanceStats((prev: any) => ({ ...prev, [hostel.hostel_id]: data.finance }));
+          setDueAlerts(data.dueAlerts);
 
-          return result;
+          return { 
+            ...hostel, 
+            stats: data.stats,
+            room_details: data.details.room_details,
+            rooms: data.rooms
+          };
         } catch (e) {
-          console.error(`Error fetching data for hostel ${hostel.hostel_id}:`, e);
-          return result;
+          console.error(`Error fetching summary for hostel ${hostel.hostel_id}:`, e);
+          return { 
+            ...hostel, 
+            stats: { totalStudents: 0, totalRooms: 0, availableRooms: 0 },
+            room_details: [],
+            rooms: []
+          };
         }
       }));
       

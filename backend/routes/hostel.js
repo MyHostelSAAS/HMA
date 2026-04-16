@@ -17,6 +17,63 @@ const transporter = nodemailer.createTransport({
 
 // --- CRITICAL DETAIL ROUTES (Must be at the top) ---
 
+// Warden: Consolidated Dashboard Summary (Aggregator API)
+router.get('/:hostelId/dashboard-summary', authenticateToken, authorizeRoles('warden', 'admin'), async (req, res) => {
+  try {
+    const hostelId = parseInt(req.params.hostelId);
+    console.log('--- API DEBUG: Fetching Consolidated Dashboard for Hostel:', hostelId);
+
+    // Run all queries in parallel for maximum speed
+    const [statsRes, detailsRes, roomsRes, finRes, dueRes] = await Promise.all([
+      db.query(`
+        SELECT 
+          (SELECT COUNT(*) FROM students WHERE hostel_id = $1 AND status = 'active') as "totalStudents",
+          (SELECT SUM(capacity) FROM rooms WHERE hostel_id = $1) as "totalRooms",
+          (SELECT COUNT(*) FROM rooms WHERE hostel_id = $1 AND status = 'available') as "availableRooms",
+          (SELECT COALESCE(SUM(amount), 0) FROM fees WHERE hostel_id = $1 AND status = 'pending') as "pendingFees"
+      `, [hostelId]),
+      db.query('SELECT * FROM hostels WHERE hostel_id = $1', [hostelId]),
+      db.query('SELECT * FROM rooms WHERE hostel_id = $1', [hostelId]),
+      db.query(`
+        SELECT 
+          COUNT(*) as "overdueCount" 
+        FROM fees 
+        WHERE hostel_id = $1 AND status = 'pending' AND due_date < CURRENT_DATE
+      `, [hostelId]),
+      db.query(`
+        SELECT f.*, s.name, r.room_number as room_number 
+        FROM fees f 
+        JOIN students s ON f.student_id = s.student_id 
+        JOIN rooms r ON s.room_id = r.room_id 
+        WHERE f.hostel_id = $1 AND f.status = 'pending' AND f.due_date < CURRENT_DATE 
+        LIMIT 5
+      `, [hostelId])
+    ]);
+
+    // Process and calculate derived stats
+    const stats = statsRes.rows[0];
+    const totalStudents = parseInt(stats.totalStudents);
+    const totalCapacity = parseInt(stats.totalRooms);
+    const occupancyRate = totalCapacity > 0 ? Math.round((totalStudents / totalCapacity) * 100) : 0;
+    
+    // Mocking collection ratio for now as per current frontend logic
+    stats.occupancyRate = occupancyRate;
+    stats.collectionRatio = 75; 
+
+    res.json({
+      stats,
+      details: detailsRes.rows[0],
+      rooms: roomsRes.rows,
+      finance: finRes.rows[0],
+      dueAlerts: dueRes.rows
+    });
+
+  } catch (err) {
+    console.error('Consolidated dashboard error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // Warden: Get Fees (MOVED TO TOP FOR PRIORITY)
 router.get('/:hostelId/fees', authenticateToken, authorizeRoles('warden', 'admin'), async (req, res) => {
   try {

@@ -38,6 +38,27 @@ app.use('/api/hostels', hostelRoutes);
 app.use('/api/finance', financeRoutes);
 app.use('/api/owner', ownerRoutes);
 
+// Health Check Endpoint (For Cron Job and Uptime Monitoring)
+app.get('/api/health', async (req, res) => {
+  try {
+    // Check Database Connection
+    const dbResult = await db.query('SELECT NOW()');
+    res.status(200).json({
+      status: 'healthy',
+      database: 'connected',
+      server_time: new Date().toISOString(),
+      db_time: dbResult.rows[0].now
+    });
+  } catch (err) {
+    console.error('--- HEALTH CHECK FAILED ---', err);
+    res.status(500).json({
+      status: 'unhealthy',
+      database: 'disconnected',
+      error: 'Database connection failed'
+    });
+  }
+});
+
 app.get('/', (req, res) => {
   res.json({ message: 'Hostel Management System API is running.' });
 });
