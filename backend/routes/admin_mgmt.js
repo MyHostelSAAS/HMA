@@ -16,6 +16,25 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Migration helper to ensure schema is correct
+const ensureSchema = async () => {
+  try {
+    await db.query(`
+      ALTER TABLE admins ADD COLUMN IF NOT EXISTS status VARCHAR(20) DEFAULT 'active';
+      ALTER TABLE admins ADD COLUMN IF NOT EXISTS role VARCHAR(50) DEFAULT 'Super Admin';
+      ALTER TABLE admins ADD COLUMN IF NOT EXISTS phone VARCHAR(20);
+      ALTER TABLE admins ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE admins ADD COLUMN IF NOT EXISTS reset_token TEXT;
+      ALTER TABLE admins ADD COLUMN IF NOT EXISTS reset_expiry TIMESTAMP;
+    `);
+  } catch (err) {
+    console.error('Error ensuring admin schema:', err);
+  }
+};
+
+// Run schema ensure once on load
+ensureSchema();
+
 // GET all admins
 router.get('/', authenticateToken, authorizeRoles('admin', 'owner'), async (req, res) => {
   try {
