@@ -87,7 +87,8 @@ const AdminsPage = () => {
     try {
       await api.put(`/admin-mgmt/${selectedAdmin.admin_id}`, {
         name: selectedAdmin.name,
-        role: selectedAdmin.role,
+        email: selectedAdmin.email,
+        role: 'Super Admin',
         status: selectedAdmin.status,
         phone: selectedAdmin.phone
       });
@@ -166,7 +167,7 @@ const AdminsPage = () => {
               </div>
               Admin Management
             </h1>
-            <p className="text-slate-500 mt-1 font-medium">Manage system administrators and their access levels.</p>
+            <p className="text-slate-500 mt-1 font-medium">Manage system administrators and their account status.</p>
           </div>
           <button 
             onClick={() => setShowAddModal(true)}
@@ -215,7 +216,6 @@ const AdminsPage = () => {
                 <tr className="bg-slate-50/50 border-b border-slate-100">
                   <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Admin Name</th>
                   <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Contact Info</th>
-                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Role</th>
                   <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Status</th>
                   <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
                 </tr>
@@ -235,21 +235,10 @@ const AdminsPage = () => {
                       </div>
                     </td>
                     <td className="px-8 py-6">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2 text-slate-600">
-                          <Mail size={14} className="text-slate-300" />
-                          <span className="text-sm font-bold">{admin.email}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-slate-600">
-                          <Phone size={14} className="text-slate-300" />
-                          <span className="text-sm font-bold">{admin.phone || 'N/A'}</span>
-                        </div>
+                      <div className="flex items-center gap-2 text-slate-600">
+                        <Mail size={14} className="text-slate-300" />
+                        <span className="text-sm font-bold">{admin.email}</span>
                       </div>
-                    </td>
-                    <td className="px-8 py-6 text-center">
-                      <span className="px-4 py-1.5 bg-blue-50 text-blue-700 rounded-full text-[10px] font-black uppercase tracking-widest border border-blue-100">
-                        {admin.role}
-                      </span>
                     </td>
                     <td className="px-8 py-6 text-center">
                       <div className={cn(
@@ -342,7 +331,7 @@ const AdminsPage = () => {
                 </div>}
 
                 <form onSubmit={handleAddAdmin} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-6">
                     <div className="space-y-2">
                       <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
                       <input 
@@ -376,28 +365,6 @@ const AdminsPage = () => {
                         onChange={(e) => setFormData({...formData, password: e.target.value})}
                       />
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Phone Number</label>
-                      <input 
-                        type="tel" 
-                        placeholder="+91 00000 00000"
-                        className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-600/5 focus:border-blue-600 transition-all"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Assigned Role</label>
-                    <select 
-                      className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-600/5 focus:border-blue-600 transition-all appearance-none cursor-pointer"
-                      value={formData.role}
-                      onChange={(e) => setFormData({...formData, role: e.target.value})}
-                    >
-                      <option value="Super Admin">Super Admin</option>
-                      <option value="Manager">Manager</option>
-                      <option value="Moderator">Moderator</option>
-                    </select>
                   </div>
 
                   <button 
@@ -454,39 +421,59 @@ const AdminsPage = () => {
                       onChange={(e) => setSelectedAdmin({...selectedAdmin, name: e.target.value})}
                     />
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Role</label>
-                      <select 
-                        className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-600/5 focus:border-blue-600 transition-all appearance-none cursor-pointer"
-                        value={selectedAdmin.role}
-                        onChange={(e) => setSelectedAdmin({...selectedAdmin, role: e.target.value})}
+                  
+                  <div className="space-y-2">
+                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+                    <input 
+                      required
+                      type="email" 
+                      className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-600/5 focus:border-blue-600 transition-all"
+                      value={selectedAdmin.email}
+                      onChange={(e) => setSelectedAdmin({...selectedAdmin, email: e.target.value})}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Account Status</label>
+                    <div className="flex p-1 bg-slate-100 rounded-2xl w-fit">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedAdmin({...selectedAdmin, status: 'active'})}
+                        className={cn(
+                          "px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                          selectedAdmin.status === 'active' 
+                            ? "bg-white text-emerald-600 shadow-sm" 
+                            : "text-slate-400 hover:text-slate-600"
+                        )}
                       >
-                        <option value="Super Admin">Super Admin</option>
-                        <option value="Manager">Manager</option>
-                        <option value="Moderator">Moderator</option>
-                      </select>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Status</label>
-                      <select 
-                        className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-600/5 focus:border-blue-600 transition-all appearance-none cursor-pointer"
-                        value={selectedAdmin.status}
-                        onChange={(e) => setSelectedAdmin({...selectedAdmin, status: e.target.value})}
+                        Active
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedAdmin({...selectedAdmin, status: 'disabled'})}
+                        className={cn(
+                          "px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                          selectedAdmin.status === 'disabled' 
+                            ? "bg-white text-rose-600 shadow-sm" 
+                            : "text-slate-400 hover:text-slate-600"
+                        )}
                       >
-                        <option value="active">Active</option>
-                        <option value="disabled">Disabled</option>
-                      </select>
+                        Inactive
+                      </button>
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Phone Number</label>
-                    <input 
-                      type="tel" 
-                      className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-600/5 focus:border-blue-600 transition-all"
-                      value={selectedAdmin.phone || ''}
-                      onChange={(e) => setSelectedAdmin({...selectedAdmin, phone: e.target.value})}
-                    />
+
+                  <div className="pt-4 border-t border-slate-50">
+                    <button 
+                      type="button"
+                      onClick={() => handleResetPassword(selectedAdmin.admin_id)}
+                      className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-bold text-sm transition-colors group"
+                    >
+                      <div className="p-2 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
+                        <Key size={16} />
+                      </div>
+                      Reset Admin Password
+                    </button>
                   </div>
 
                   <button 
@@ -533,9 +520,6 @@ const AdminsPage = () => {
                   <div>
                     <h2 className="text-3xl font-black text-slate-900">{selectedAdmin.name}</h2>
                     <div className="flex items-center gap-2 mt-2">
-                      <span className="px-3 py-1 bg-blue-50 text-blue-700 rounded-lg text-[10px] font-black uppercase tracking-widest border border-blue-100">
-                        {selectedAdmin.role}
-                      </span>
                       <span className={cn(
                         "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border",
                         selectedAdmin.status === 'active' 
@@ -556,15 +540,6 @@ const AdminsPage = () => {
                     <div>
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Email Address</p>
                       <p className="font-bold text-slate-900">{selectedAdmin.email}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-3xl border border-slate-100">
-                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-slate-400 shadow-sm">
-                      <Phone size={20} />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Phone Number</p>
-                      <p className="font-bold text-slate-900">{selectedAdmin.phone || 'Not provided'}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-3xl border border-slate-100">
