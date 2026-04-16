@@ -834,7 +834,7 @@ export default function StudentProfilePage() {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.1 }}
-              className="bg-white rounded-[32px] p-8 shadow-xl shadow-slate-200/30 border border-slate-100 hover:shadow-2xl transition-all duration-300"
+              className="bg-white rounded-[24px] md:rounded-[32px] p-6 md:p-8 shadow-xl shadow-slate-200/30 border border-slate-100 hover:shadow-2xl transition-all duration-300"
             >
               <h3 className="text-[10px] font-black text-indigo-600 mb-8 uppercase tracking-[0.2em] flex items-center gap-2">
                 <div className="w-1.5 h-6 bg-indigo-600 rounded-full" />
@@ -870,7 +870,7 @@ export default function StudentProfilePage() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-[32px] p-8 shadow-xl shadow-slate-200/30 border border-slate-100 hover:shadow-2xl transition-all duration-300"
+              className="bg-white rounded-[24px] md:rounded-[32px] p-6 md:p-8 shadow-xl shadow-slate-200/30 border border-slate-100 hover:shadow-2xl transition-all duration-300"
             >
               <h3 className="text-[10px] font-black text-emerald-600 mb-8 uppercase tracking-[0.2em] flex items-center gap-2">
                 <div className="w-1.5 h-6 bg-emerald-600 rounded-full" />
@@ -913,7 +913,7 @@ export default function StudentProfilePage() {
               initial={{ x: 20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="bg-white rounded-[32px] p-8 shadow-xl shadow-slate-200/30 border border-slate-100 hover:shadow-2xl transition-all duration-300"
+              className="bg-white rounded-[24px] md:rounded-[32px] p-6 md:p-8 shadow-xl shadow-slate-200/30 border border-slate-100 hover:shadow-2xl transition-all duration-300"
             >
               <h3 className="text-[10px] font-black text-amber-600 mb-8 uppercase tracking-[0.2em] flex items-center gap-2">
                 <div className="w-1.5 h-6 bg-amber-600 rounded-full" />
@@ -948,7 +948,7 @@ export default function StudentProfilePage() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="bg-white rounded-[40px] p-10 shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden group"
+            className="bg-white rounded-[24px] md:rounded-[40px] p-6 md:p-10 shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden group"
           >
             {/* Background Decorative Elements */}
             <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-indigo-50/50 to-transparent pointer-events-none" />
@@ -1194,7 +1194,7 @@ export default function StudentProfilePage() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="bg-white rounded-[40px] p-10 shadow-2xl shadow-slate-200/50 border border-slate-100"
+            className="bg-white rounded-[24px] md:rounded-[40px] p-6 md:p-10 shadow-2xl shadow-slate-200/50 border border-slate-100 overflow-hidden"
           >
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
               <div className="space-y-2">
@@ -1215,8 +1215,8 @@ export default function StudentProfilePage() {
 
             {/* Advance Pool section removed as requested */}
             
-            <div className="w-full">
-              <table className="w-full text-left border-separate border-spacing-y-4">
+            <div className="w-full overflow-x-auto pb-4 custom-scrollbar">
+              <table className="w-full min-w-[1000px] text-left border-separate border-spacing-y-4">
                 <thead>
                   <tr className="text-slate-400">
                     <th className="pb-4 text-[10px] font-black uppercase tracking-[0.1em] pl-6 w-[4%]">S.No</th>
@@ -1538,11 +1538,11 @@ export default function StudentProfilePage() {
                 initial={{ scale: 0.9, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                className="bg-white rounded-[48px] w-full max-w-2xl shadow-2xl p-12 relative max-h-[90vh] overflow-y-auto z-10 border border-slate-100"
+                className="bg-white rounded-[32px] md:rounded-[48px] w-full max-w-2xl shadow-2xl p-6 md:p-12 relative max-h-[90vh] overflow-y-auto z-10 border border-slate-100"
               >
                 <button 
                   onClick={() => { setShowFeeModal(false); setFormError(""); }} 
-                  className="absolute top-10 right-10 p-4 bg-slate-50 rounded-[20px] text-slate-400 hover:text-slate-900 transition-colors"
+                  className="absolute top-6 right-6 md:top-10 md:right-10 p-4 bg-slate-50 rounded-[20px] text-slate-400 hover:text-slate-900 transition-colors"
                 >
                   <X size={24} />
                 </button>
@@ -1922,9 +1922,9 @@ export default function StudentProfilePage() {
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
-                className="bg-white rounded-[48px] w-full max-w-4xl max-h-[85vh] overflow-hidden shadow-2xl relative z-10 border border-slate-100 flex flex-col"
+                className="bg-white rounded-[32px] md:rounded-[48px] w-full max-w-4xl max-h-[85vh] overflow-hidden shadow-2xl relative z-10 border border-slate-100 flex flex-col"
               >
-                <div className="p-12 border-b border-slate-50 flex items-center justify-between bg-slate-50/30">
+                <div className="p-6 md:p-12 border-b border-slate-50 flex items-center justify-between bg-slate-50/30">
                   <div className="flex items-center gap-6">
                     <div className="w-16 h-16 bg-indigo-600 text-white rounded-[24px] flex items-center justify-center shadow-xl shadow-indigo-200">
                       <History size={32} />
@@ -1939,7 +1939,7 @@ export default function StudentProfilePage() {
                   </button>
                 </div>
 
-                <div className="p-12 overflow-y-auto flex-1 space-y-6 bg-white">
+                <div className="p-6 md:p-12 overflow-y-auto flex-1 space-y-6 bg-white">
                   {existingFees.filter(f => f.status === 'paid' || f.status === 'partial').length > 0 ? (
                     existingFees.filter(f => f.status === 'paid' || f.status === 'partial').map((fee, idx) => (
                       <motion.div 

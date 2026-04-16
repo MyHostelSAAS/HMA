@@ -41,6 +41,13 @@ router.post('/login', async (req, res) => {
 
     const user = result.rows[0];
     console.log(`--- AUTH DEBUG --- Input: ${password}, DB Hash: ${user.password}`);
+
+    // Check if user is disabled
+    if (user.status === 'disabled') {
+      console.log(`--- LOGIN FAILED --- Account disabled for ${email}`);
+      return res.status(403).json({ error: 'Your account has been disabled. Please contact system administrator.' });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     console.log(`--- BCRYPT CHECK --- Match: ${isMatch}`);
     
@@ -181,6 +188,64 @@ router.post('/reset-password', async (req, res) => {
     await db.query(`UPDATE ${table} SET password = $1, reset_token = NULL, reset_expiry = NULL WHERE email = $2`, [hashedPassword, email]);
 
     console.log(`--- PASSWORD RESET SUCCESSFUL --- User: ${user.name}`);
+
+    // Send Confirmation Email (Async - don't wait for it to respond to user)
+    const sendConfirmationEmail = async () => {
+      try {
+        const mailOptions = {
+          from: `"My Hostel" <${process.env.EMAIL_USER}>`,
+          to: email,
+          subject: 'Security Alert: Password Successfully Changed',
+          html: `
+            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; color: #1e293b; background-color: #f8fafc;">
+              <div style="max-width: 600px; margin: 0 auto; bg-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                <div style="background-color: #2563eb; padding: 32px; text-align: center;">
+                  <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.025em;">My Hostel Portal</h1>
+                </div>
+                <div style="padding: 40px; background-color: #ffffff;">
+                  <div style="text-align: center; margin-bottom: 32px;">
+                    <div style="display: inline-block; padding: 16px; background-color: #f0fdf4; border-radius: 50%; margin-bottom: 16px;">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    </div>
+                    <h2 style="color: #0f172a; margin: 0; font-size: 20px; font-weight: 700;">Password Changed Successfully</h2>
+                  </div>
+                  
+                  <p style="font-size: 16px; line-height: 1.6; margin-bottom: 24px;">Hello <strong>${user.name}</strong>,</p>
+                  
+                  <p style="font-size: 16px; line-height: 1.6; margin-bottom: 24px;">This is a confirmation that the password for your My Hostel account has been successfully updated.</p>
+                  
+                  <div style="background-color: #f8fafc; border-radius: 12px; padding: 24px; margin-bottom: 32px; border: 1px solid #e2e8f0;">
+                    <p style="margin: 0 0 12px 0; font-size: 14px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Details of Change:</p>
+                    <p style="margin: 0; font-size: 15px; color: #1e293b;"><strong>Date:</strong> ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                    <p style="margin: 8px 0 0 0; font-size: 15px; color: #1e293b;"><strong>Time:</strong> ${new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true })}</p>
+                  </div>
+
+                  <div style="text-align: center; margin-bottom: 32px;">
+                    <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/auth/login" style="display: inline-block; padding: 14px 32px; background-color: #2563eb; color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 16px; transition: background-color 0.2s;">Login to Portal</a>
+                  </div>
+
+                  <p style="font-size: 14px; line-height: 1.6; color: #64748b; margin: 0; padding-top: 24px; border-top: 1px solid #e2e8f0;">
+                    If you did not perform this action, please contact our support team immediately or reset your password again to secure your account.
+                  </p>
+                </div>
+                <div style="background-color: #f1f5f9; padding: 24px; text-align: center; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
+                  <p style="margin: 0; font-size: 13px; color: #94a3b8; font-weight: 500;">&copy; ${new Date().getFullYear()} My Hostel Management System. All rights reserved.</p>
+                </div>
+              </div>
+            </div>
+          `,
+        };
+
+        await transporter.sendMail(mailOptions);
+        console.log(`--- CONFIRMATION EMAIL SENT --- User: ${user.name}, Email: ${email}`);
+      } catch (mailErr) {
+        console.error(`--- CONFIRMATION EMAIL FAILED ---`, mailErr);
+      }
+    };
+
+    // Trigger the email without awaiting it to keep the response fast
+    sendConfirmationEmail();
+
     res.json({ message: 'Password reset successful! You can now login with your new password.' });
 
   } catch (err) {

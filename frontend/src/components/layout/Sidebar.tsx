@@ -19,7 +19,8 @@ import {
   UserPlus, 
   LogOut,
   Menu,
-  X
+  X,
+  ShieldCheck
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -32,6 +33,7 @@ const menuItems = {
   admin: [
     { label: 'Dashboard', icon: LayoutDashboard, href: '/admin' },
     { label: 'Management', icon: UserPlus, href: '/admin/management' },
+    { label: 'Admins', icon: ShieldCheck, href: '/admin/admins' },
     { label: 'Hostels', icon: Building2, href: '/admin/hostels' },
     { label: 'Owners', icon: UserCog, href: '/admin/owners' },
     { label: 'Wardens', icon: Users, href: '/admin/wardens' },

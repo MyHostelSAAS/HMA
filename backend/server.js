@@ -31,12 +31,14 @@ const authRoutes = require('./routes/auth');
 const hostelRoutes = require('./routes/hostel');
 const financeRoutes = require('./routes/finance');
 const ownerRoutes = require('./routes/owner');
+const adminMgmtRoutes = require('./routes/admin_mgmt');
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/hostels', hostelRoutes);
 app.use('/api/finance', financeRoutes);
 app.use('/api/owner', ownerRoutes);
+app.use('/api/admin-mgmt', adminMgmtRoutes);
 
 // Health Check Endpoint (For Cron Job and Uptime Monitoring)
 app.get('/api/health', async (req, res) => {
