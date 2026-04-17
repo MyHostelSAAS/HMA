@@ -224,36 +224,38 @@ const OwnerDashboard = () => {
   return (
     <div className="min-h-screen bg-[#FDFDFF]">
       {/* TOP HEADER */}
-      <header className="px-6 py-6 md:py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <header className="px-4 md:px-6 py-6 md:py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl md:text-2xl font-black text-[#1E293B] tracking-tight">Welcome, {user?.name || 'Captain'}</h1>
           <p className="text-[#64748B] text-[8px] md:text-[10px] font-bold uppercase tracking-[0.2em] mt-1">Portfolio Insights & Decision Engine</p>
         </div>
-        <div className="flex items-center gap-4">
-          <HostelSelector />
-          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#EEF2FF] flex items-center justify-center text-[#4F46E5] font-black text-xs md:text-sm">
+        <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
+          <div className="flex-1 md:flex-none">
+            <HostelSelector />
+          </div>
+          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#EEF2FF] flex items-center justify-center text-[#4F46E5] font-black text-xs md:text-sm shrink-0">
             {user?.name?.charAt(0) || 'C'}
           </div>
         </div>
       </header>
 
-      <div className="px-6 pb-20 space-y-8">
+      <div className="px-4 md:px-6 pb-20 space-y-8">
         {/* MONTHLY COLLECTION PROGRESS (REDESIGNED) */}
         <section className="space-y-6">
           <div className="flex items-center justify-between">
             <h3 className="text-[10px] font-black text-[#94A3B8] uppercase tracking-[0.2em]">Portfolio Performance</h3>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-            <StatCard 
-              icon={Building2} 
-              title="Total Students" 
-              value={data?.collectionProgress?.occupiedSeats || 0}
-              subValue={data?.collectionProgress?.totalSeats || 0}
-              unit="Seats"
-              progress={data?.collectionProgress?.occupancyRatio || 0}
-              color="text-[#6366f1]"
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
+    <StatCard 
+      icon={Building2} 
+      title="Total Students" 
+      value={data?.collectionProgress?.occupiedSeats || 0}
+      subValue={data?.collectionProgress?.totalSeats || 0}
+      unit="Seats"
+      progress={data?.collectionProgress?.occupancyRatio || 0}
+      color="text-[#6366f1]"
+    />
             <StatCard 
               icon={PieChart} 
               title="Collection Status" 
@@ -285,13 +287,13 @@ const OwnerDashboard = () => {
           </div>
         </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
           {/* LEFT COLUMN: SUMMARY & TREND */}
           <div className="lg:col-span-8 space-y-8">
             {/* MONTHLY SUMMARY */}
             <section className="space-y-4">
               <h3 className="text-[10px] font-black text-[#94A3B8] uppercase tracking-[0.2em]">Financial Summary</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
                 <StatCard 
                   icon={Wallet} 
                   title="Total Income" 
@@ -319,7 +321,7 @@ const OwnerDashboard = () => {
             {/* DAILY COLLECTION TREND */}
             <section className="space-y-4">
               <h3 className="text-[10px] font-black text-[#94A3B8] uppercase tracking-[0.2em]">Collective Collection Analytics</h3>
-              <div className="bg-white border border-[#F1F5F9] p-10 rounded-[3rem] shadow-sm h-[350px] transition-all duration-300 hover:shadow-md">
+              <div className="bg-white border border-[#F1F5F9] p-6 md:p-10 rounded-2xl md:rounded-[3rem] shadow-sm h-[300px] md:h-[350px] transition-all duration-300 hover:shadow-md overflow-hidden">
                 <Line 
                   data={chartData} 
                   options={chartOptions} 
@@ -331,61 +333,63 @@ const OwnerDashboard = () => {
           {/* RIGHT COLUMN: PENDING & ADVANCE */}
           <div className="lg:col-span-4 space-y-8">
             {/* PENDING SUMMARY TABLE (REDESIGNED) */}
-            <section className="bg-white border border-[#F1F5F9] p-8 rounded-[2.5rem] shadow-sm space-y-6">
+            <section className="bg-white border border-[#F1F5F9] p-5 md:p-8 rounded-2xl md:rounded-[2.5rem] shadow-sm space-y-6">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-[#FEF2F2] rounded-2xl flex items-center justify-center text-[#EF4444]">
-                  <AlertCircle size={24} />
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-[#FEF2F2] rounded-xl md:rounded-2xl flex items-center justify-center text-[#EF4444] shrink-0">
+                  <AlertCircle size={20} md:size={24} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-black text-[#1E293B] tracking-tight">₹{data?.pending?.total?.toLocaleString() || '0'} Outstanding</h3>
+                  <h3 className="text-base md:text-lg font-black text-[#1E293B] tracking-tight truncate max-w-[150px] md:max-w-none">₹{data?.pending?.total?.toLocaleString() || '0'} Outstanding</h3>
                   <p className="text-[#64748B] text-[10px] font-bold uppercase tracking-widest mt-0.5">Audit Required</p>
                 </div>
               </div>
               
               <div className="space-y-4 pt-4">
                 <p className="text-[9px] font-black text-[#94A3B8] uppercase tracking-widest ml-1">Delinquent Residents</p>
-                <div className="overflow-hidden rounded-2xl border border-[#F1F5F9]">
-                  <table className="w-full text-left">
-                    <thead>
-                      <tr className="bg-[#F8FAFC]">
-                        <th className="px-4 py-3 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">Name</th>
-                        <th className="px-4 py-3 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">Unit</th>
-                        <th className="px-4 py-3 text-[8px] font-black text-[#DC2626] uppercase tracking-widest text-right">Amount</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#F1F5F9]">
-                      {data?.pending?.delinquents?.map((student: any, idx: number) => (
-                        <tr key={idx} className="hover:bg-[#F8FAFC] transition-all">
-                          <td className="px-4 py-3 text-[10px] font-bold text-[#475569]">{student.name}</td>
-                          <td className="px-4 py-3 text-[9px] font-bold text-[#94A3B8] uppercase">
-                            {student.hostel_name?.substring(0, 8)}.. • {student.room_no}
-                          </td>
-                          <td className="px-4 py-3 text-[10px] font-black text-[#DC2626] text-right">
-                            ₹{parseFloat(student.pending_amount || 0).toLocaleString()}
-                          </td>
+                <div className="overflow-hidden rounded-xl md:rounded-2xl border border-[#F1F5F9]">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                      <thead>
+                        <tr className="bg-[#F8FAFC]">
+                          <th className="px-4 py-3 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">Name</th>
+                          <th className="px-4 py-3 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">Unit</th>
+                          <th className="px-4 py-3 text-[8px] font-black text-[#DC2626] uppercase tracking-widest text-right">Amount</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-[#F1F5F9]">
+                        {data?.pending?.delinquents?.map((student: any, idx: number) => (
+                          <tr key={idx} className="hover:bg-[#F8FAFC] transition-all">
+                            <td className="px-4 py-3 text-[10px] font-bold text-[#475569] truncate max-w-[80px]">{student.name}</td>
+                            <td className="px-4 py-3 text-[9px] font-bold text-[#94A3B8] uppercase">
+                              {student.hostel_name?.substring(0, 8)}.. • {student.room_no}
+                            </td>
+                            <td className="px-4 py-3 text-[10px] font-black text-[#DC2626] text-right whitespace-nowrap">
+                              ₹{parseFloat(student.pending_amount || 0).toLocaleString()}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </section>
 
             {/* ADVANCE PAYMENT DATA (REDESIGNED) */}
-            <section className="bg-white border border-[#F1F5F9] p-8 rounded-[2.5rem] shadow-sm space-y-8">
+            <section className="bg-white border border-[#F1F5F9] p-5 md:p-8 rounded-2xl md:rounded-[2.5rem] shadow-sm space-y-8">
               <div className="text-center space-y-4">
                 <h3 className="text-[10px] font-black text-[#94A3B8] uppercase tracking-[0.2em]">Security Reserves</h3>
-                <div className="w-12 h-12 bg-[#F5F3FF] rounded-2xl flex items-center justify-center text-[#7C3AED] mx-auto shadow-sm">
-                  <Wallet size={24} />
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-[#F5F3FF] rounded-xl md:rounded-2xl flex items-center justify-center text-[#7C3AED] mx-auto shadow-sm">
+                  <Wallet size={20} md:size={24} />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center p-4 rounded-2xl bg-[#F8FAFC] border border-[#F1F5F9]">
+                <div className="grid grid-cols-2 gap-3 md:gap-4">
+                  <div className="text-center p-3 md:p-4 rounded-xl md:rounded-2xl bg-[#F8FAFC] border border-[#F1F5F9]">
                     <p className="text-[8px] font-black text-[#94A3B8] uppercase tracking-widest mb-1">Total Collected</p>
-                    <p className="text-sm font-black text-[#1E293B]">₹{data?.advance?.totalCollected?.toLocaleString() || '0'}</p>
+                    <p className="text-xs md:text-sm font-black text-[#1E293B]">₹{data?.advance?.totalCollected?.toLocaleString() || '0'}</p>
                   </div>
-                  <div className="text-center p-4 rounded-2xl bg-[#F0FDF4] border border-[#DCFCE7]">
+                  <div className="text-center p-3 md:p-4 rounded-xl md:rounded-2xl bg-[#F0FDF4] border border-[#DCFCE7]">
                     <p className="text-[8px] font-black text-[#059669] uppercase tracking-widest mb-1">Remaining Active</p>
-                    <p className="text-sm font-black text-[#065F46]">₹{data?.advance?.remainingAdvance?.toLocaleString() || '0'}</p>
+                    <p className="text-xs md:text-sm font-black text-[#065F46]">₹{data?.advance?.remainingAdvance?.toLocaleString() || '0'}</p>
                   </div>
                 </div>
                 <div className="flex items-center justify-center gap-2 text-[9px] font-black text-[#4F46E5] bg-[#EEF2FF] px-4 py-2 rounded-full border border-[#E0E7FF] uppercase tracking-tighter">
@@ -399,20 +403,20 @@ const OwnerDashboard = () => {
         {/* REPORTS & EXPORTS */}
         <section className="space-y-4 pt-8">
           <h3 className="text-[10px] font-black text-[#94A3B8] uppercase tracking-[0.2em]">Exports & Governance</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {[
               { label: 'Audit Log', desc: 'Portfolio Transaction PDF', icon: Download, bg: 'bg-[#EEF2FF]', iconColor: 'text-[#4F46E5]' },
               { label: 'Fee Matrix', desc: 'Resident Status Export', icon: FileText, bg: 'bg-[#F0FDF4]', iconColor: 'text-[#10B981]' },
               { label: 'Cost Analysis', desc: 'Operating Expense Audit', icon: PieChart, bg: 'bg-[#FFFBEB]', iconColor: 'text-[#D97706]' },
               { label: 'Intelligence', desc: 'Portfolio Forecasts', icon: Activity, bg: 'bg-[#FDF2F8]', iconColor: 'text-[#DB2777]' },
             ].map((item, idx) => (
-              <div key={idx} className="bg-white border border-[#F1F5F9] p-6 rounded-[2rem] shadow-sm flex items-center gap-4 group cursor-pointer hover:border-[#E2E8F0] hover:shadow-md transition-all">
-                <div className={cn("w-10 h-10 rounded-2xl flex items-center justify-center", item.bg, item.iconColor)}>
+              <div key={idx} className="bg-white border border-[#F1F5F9] p-5 md:p-6 rounded-2xl md:rounded-[2rem] shadow-sm flex items-center gap-4 group cursor-pointer hover:border-[#E2E8F0] hover:shadow-md transition-all">
+                <div className={cn("w-10 h-10 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0", item.bg, item.iconColor)}>
                   <item.icon size={20} />
                 </div>
-                <div>
-                  <h4 className="text-xs font-black text-[#1E293B] tracking-tight group-hover:text-[#4F46E5] transition-all">{item.label}</h4>
-                  <p className="text-[9px] font-bold text-[#94A3B8] uppercase tracking-widest mt-0.5">{item.desc}</p>
+                <div className="overflow-hidden">
+                  <h4 className="text-xs font-black text-[#1E293B] tracking-tight group-hover:text-[#4F46E5] transition-all truncate">{item.label}</h4>
+                  <p className="text-[9px] font-bold text-[#94A3B8] uppercase tracking-widest mt-0.5 truncate">{item.desc}</p>
                 </div>
               </div>
             ))}

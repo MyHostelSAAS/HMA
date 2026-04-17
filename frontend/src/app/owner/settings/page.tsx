@@ -173,20 +173,7 @@ const SettingsPage = () => {
               </div>
             </div>
 
-            <div className="bg-[#4F46E5] p-6 md:p-8 rounded-2xl md:rounded-[2.5rem] shadow-xl shadow-indigo-100 text-white text-center space-y-4 md:space-y-6">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-xl md:rounded-2xl flex items-center justify-center mx-auto">
-                <UserCog size={20} />
-              </div>
-              <div className="space-y-2">
-                <h2 className="text-base md:text-lg font-black tracking-tight">Need Support?</h2>
-                <p className="text-[#E0E7FF] text-[9px] md:text-[10px] font-bold leading-relaxed uppercase tracking-widest opacity-80 px-2 md:px-4">
-                  Captain, for core business changes like fee structures, please contact the admin.
-                </p>
-              </div>
-              <button className="w-full bg-white/10 hover:bg-white/20 py-3 md:py-4 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all">
-                Contact Admin
-              </button>
-            </div>
+
           </div>
         </div>
       </div>

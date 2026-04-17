@@ -523,36 +523,44 @@ export default function StudentLedgerPage() {
                       const isPaid = fee.status === 'paid';
                       const adjustment = parseFloat(fee.adjustment_amount || "0");
                       return (
-                        <motion.div key={idx} whileHover={{ scale: 1.02, backgroundColor: '#f8fafc' }} className={cn("p-5 rounded-[28px] border transition-all duration-300", isPaid ? "bg-emerald-50/50 border-emerald-100/50" : "bg-slate-50/50 border-slate-100")}>
-                          <div className="flex justify-between items-start">
-                            <div className="space-y-1"><p className={cn("text-sm font-black", isPaid ? "text-emerald-700" : "text-slate-800")}>{fee.installment_name || fee.month}</p><div className="flex items-center gap-2"><span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Due: {new Date(fee.due_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span></div></div>
-                            <div className="text-right"><p className="text-lg font-black text-slate-900 tracking-tight">₹{(parseFloat(fee.amount) + adjustment).toLocaleString()}</p>{adjustment !== 0 && (<p className="text-[9px] font-black text-emerald-600 uppercase tracking-tighter">₹{Math.abs(adjustment).toLocaleString()} Security Adjusted</p>)}</div>
+                        <motion.div key={idx} whileHover={{ scale: 1.02, backgroundColor: '#f8fafc' }} className={cn("p-4 md:p-5 rounded-2xl md:rounded-[28px] border transition-all duration-300", isPaid ? "bg-emerald-50/50 border-emerald-100/50" : "bg-slate-50/50 border-slate-100")}>
+                          <div className="flex justify-between items-start gap-2">
+                            <div className="space-y-1 min-w-0 flex-1">
+                              <p className={cn("text-xs md:text-sm font-black truncate", isPaid ? "text-emerald-700" : "text-slate-800")}>{fee.installment_name || fee.month}</p>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Due: {new Date(fee.due_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
+                              </div>
+                            </div>
+                            <div className="text-right shrink-0">
+                              <p className="text-sm md:text-lg font-black text-slate-900 tracking-tight whitespace-nowrap">₹{(parseFloat(fee.amount) + adjustment).toLocaleString()}</p>
+                              {adjustment !== 0 && (<p className="text-[7px] md:text-[9px] font-black text-emerald-600 uppercase tracking-tighter">₹{Math.abs(adjustment).toLocaleString()} Adjusted</p>)}
+                            </div>
                           </div>
                         </motion.div>
                       );
                     })}
                   </div>
-                  <div className="mt-8 pt-8 border-t border-slate-100 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center border border-indigo-100 shadow-sm"><ShieldCheck size={28} /></div>
-                      <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">SECURITY DEPOSIT</p><p className="text-2xl font-black text-slate-900 tracking-tighter">₹{parseFloat(student.security_deposit as any || "0").toLocaleString()}</p></div>
+                  <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6 md:gap-4">
+                    <div className="flex items-center gap-4 w-full sm:w-auto">
+                      <div className="w-12 h-12 md:w-14 md:h-14 bg-indigo-50 text-indigo-600 rounded-xl md:rounded-2xl flex items-center justify-center border border-indigo-100 shadow-sm shrink-0"><ShieldCheck size={24} md:size={28} /></div>
+                      <div><p className="text-[8px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">SECURITY DEPOSIT</p><p className="text-xl md:text-2xl font-black text-slate-900 tracking-tighter">₹{parseFloat(student.security_deposit as any || "0").toLocaleString()}</p></div>
                     </div>
                     {student.payment_model === '2 + 1 System' && (
-                      <div className="ml-8 border-l border-slate-100 pl-8">
-                        <p className="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-0.5">SECURITY DEPOSIT</p>
-                        <p className="text-2xl font-black text-amber-600 tracking-tighter">₹{getAvailableSecurity().toLocaleString()}</p>
+                      <div className="sm:ml-4 border-l-0 sm:border-l border-slate-100 pl-0 sm:pl-8 w-full sm:w-auto">
+                        <p className="text-[8px] md:text-[10px] font-black text-amber-500 uppercase tracking-widest mb-0.5">AVAILABLE SECURITY</p>
+                        <p className="text-xl md:text-2xl font-black text-amber-600 tracking-tighter">₹{getAvailableSecurity().toLocaleString()}</p>
                       </div>
                     )}
-                    <div className="flex-1 flex justify-center">
-                      <div className="px-6 py-3 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center">
+                    <div className="flex-1 flex justify-center w-full sm:w-auto">
+                      <div className="px-4 md:px-6 py-2 md:py-3 bg-slate-50 rounded-xl md:rounded-2xl border border-slate-100 flex flex-col items-center w-full sm:w-auto">
                         {student.payment_model === '2 + 1 System' ? (
-                          <><p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">MONTHLY INSTALLMENT</p><p className="text-lg font-black text-indigo-600 tracking-tight">₹{parseFloat(student.monthly_fee as any || "0").toLocaleString()}</p></>
+                          <><p className="text-[7px] md:text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">MONTHLY INSTALLMENT</p><p className="text-base md:text-lg font-black text-indigo-600 tracking-tight">₹{parseFloat(student.monthly_fee as any || "0").toLocaleString()}</p></>
                         ) : (
-                          <><p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">TOTAL SESSION VALUE</p><p className="text-lg font-black text-indigo-600 tracking-tight">₹{parseFloat(student.total_session_fees as any || "0").toLocaleString()}</p></>
+                          <><p className="text-[7px] md:text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">TOTAL SESSION VALUE</p><p className="text-base md:text-lg font-black text-indigo-600 tracking-tight">₹{parseFloat(student.total_session_fees as any || "0").toLocaleString()}</p></>
                         )}
                       </div>
                     </div>
-                    <div className="px-6 py-2 bg-emerald-50 text-emerald-700 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border border-emerald-100 shadow-sm">HELD IN TRUST</div>
+                    <div className="px-4 py-1.5 bg-emerald-50 text-emerald-700 rounded-xl text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] border border-emerald-100 shadow-sm whitespace-nowrap">HELD IN TRUST</div>
                   </div>
                 </div>
 
@@ -573,8 +581,8 @@ export default function StudentLedgerPage() {
 
           <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5 }} className="bg-white rounded-[40px] p-10 shadow-2xl shadow-slate-200/50 border border-slate-100">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12"><div className="space-y-2"><div className="flex items-center gap-4"><div className="w-2 h-10 bg-indigo-600 rounded-full shadow-lg shadow-indigo-200" /><h3 className="text-3xl font-black text-slate-900 tracking-tight">Verified Payment Log</h3></div><p className="text-slate-500 font-bold text-sm ml-6 uppercase tracking-widest flex items-center gap-2"><Activity size={14} className="text-emerald-500" />Bank-verified transaction history</p></div></div>
-            <div className="w-full">
-              <table className="w-full text-left border-separate border-spacing-y-4">
+            <div className="w-full overflow-x-auto">
+              <table className="w-full text-left border-separate border-spacing-y-2 md:border-spacing-y-4 min-w-[800px]">
                 <thead><tr className="text-slate-400"><th className="pb-4 text-[10px] font-black uppercase tracking-[0.1em] pl-6 w-[4%]">S.No</th><th className="pb-4 text-[10px] font-black uppercase tracking-[0.1em] px-2 w-[16%]">Source / Entry</th><th className="pb-4 text-[10px] font-black uppercase tracking-[0.1em] px-2 text-center w-[12%]">Plan Amount</th><th className="pb-4 text-[10px] font-black uppercase tracking-[0.1em] px-2 text-center w-[12%]">Paid Amount</th><th className="pb-4 text-[10px] font-black uppercase tracking-[0.1em] px-2 text-center w-[10%]">Status</th><th className="pb-4 text-[10px] font-black uppercase tracking-[0.1em] px-2 text-center w-[18%]">Transaction Ref</th><th className="pb-4 text-[10px] font-black uppercase tracking-[0.1em] px-2 text-right w-[20%]">Receipt</th><th className="pb-4 text-[10px] font-black uppercase tracking-[0.1em] pr-6 text-center w-[8%]">Action</th></tr></thead>
                 <tbody>
                   {(() => {

@@ -184,39 +184,41 @@ const ReportsPage = () => {
   return (
     <div className="min-h-screen bg-[#FDFDFF]">
       {/* HEADER */}
-      <header className="px-6 py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <header className="px-4 md:px-6 py-6 md:py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-[#1E293B] tracking-tight">Reports & Analytics Engine</h1>
-          <p className="text-[#64748B] text-[10px] font-bold uppercase tracking-[0.2em] mt-1">Audit Logs & Portfolio Data Exports</p>
+          <h1 className="text-xl md:text-2xl font-black text-[#1E293B] tracking-tight">Reports & Analytics Engine</h1>
+          <p className="text-[#64748B] text-[8px] md:text-[10px] font-bold uppercase tracking-[0.2em] mt-1">Audit Logs & Portfolio Data Exports</p>
         </div>
-        <div className="flex items-center gap-4">
-          <HostelSelector />
-          <div className="w-10 h-10 rounded-full bg-[#EEF2FF] flex items-center justify-center text-[#4F46E5] font-black text-sm">
+        <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
+          <div className="flex-1 md:flex-none">
+            <HostelSelector />
+          </div>
+          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#EEF2FF] flex items-center justify-center text-[#4F46E5] font-black text-xs md:text-sm shrink-0">
             {user?.name?.charAt(0) || 'C'}
           </div>
         </div>
       </header>
 
-      <div className="px-6 pb-24 space-y-10">
+      <div className="px-4 md:px-6 pb-24 space-y-8 md:space-y-10">
         {/* CONFIGURATION CARD */}
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white p-10 rounded-[3rem] border border-[#F1F5F9] shadow-sm"
+          className="bg-white p-6 md:p-10 rounded-2xl md:rounded-[3rem] border border-[#F1F5F9] shadow-sm"
         >
-          <div className="flex items-center gap-3 mb-10">
-            <Filter className="text-[#4F46E5]" size={20} />
-            <h2 className="text-xs font-black text-[#1E293B] uppercase tracking-widest">Report Configuration</h2>
+          <div className="flex items-center gap-3 mb-6 md:mb-10">
+            <Filter className="text-[#4F46E5]" size={18} md:size={20} />
+            <h2 className="text-[10px] md:text-xs font-black text-[#1E293B] uppercase tracking-widest">Report Configuration</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-8">
             <div className="space-y-2">
               <label className="text-[8px] font-black text-[#94A3B8] uppercase tracking-widest ml-1">Report Focus</label>
               <div className="relative">
                 <select 
                   value={reportType} 
                   onChange={(e) => setReportType(e.target.value)}
-                  className="w-full bg-[#F8FAFC] border border-[#F1F5F9] rounded-2xl px-4 py-3 text-xs font-bold text-[#1E293B] outline-none focus:border-[#4F46E5] focus:bg-white transition-all appearance-none"
+                  className="w-full bg-[#F8FAFC] border border-[#F1F5F9] rounded-xl md:rounded-2xl px-4 py-3 text-[10px] md:text-xs font-bold text-[#1E293B] outline-none focus:border-[#4F46E5] focus:bg-white transition-all appearance-none"
                 >
                   <option value="revenue">Revenue Audit</option>
                   <option value="expenses">Expense Audit</option>
@@ -231,7 +233,7 @@ const ReportsPage = () => {
                 type="date" 
                 value={startDate} 
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full bg-[#F8FAFC] border border-[#F1F5F9] rounded-2xl px-4 py-3 text-xs font-bold text-[#1E293B] outline-none focus:border-[#4F46E5] focus:bg-white transition-all"
+                className="w-full bg-[#F8FAFC] border border-[#F1F5F9] rounded-xl md:rounded-2xl px-4 py-3 text-[10px] md:text-xs font-bold text-[#1E293B] outline-none focus:border-[#4F46E5] focus:bg-white transition-all"
               />
             </div>
 
@@ -241,7 +243,7 @@ const ReportsPage = () => {
                 type="date" 
                 value={endDate} 
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full bg-[#F8FAFC] border border-[#F1F5F9] rounded-2xl px-4 py-3 text-xs font-bold text-[#1E293B] outline-none focus:border-[#4F46E5] focus:bg-white transition-all"
+                className="w-full bg-[#F8FAFC] border border-[#F1F5F9] rounded-xl md:rounded-2xl px-4 py-3 text-[10px] md:text-xs font-bold text-[#1E293B] outline-none focus:border-[#4F46E5] focus:bg-white transition-all"
               />
             </div>
 
@@ -251,7 +253,7 @@ const ReportsPage = () => {
                 <select 
                   value={paymentMode} 
                   onChange={(e) => setPaymentMode(e.target.value)}
-                  className="w-full bg-[#F8FAFC] border border-[#F1F5F9] rounded-2xl px-4 py-3 text-xs font-bold text-[#1E293B] outline-none focus:border-[#4F46E5] focus:bg-white transition-all appearance-none"
+                  className="w-full bg-[#F8FAFC] border border-[#F1F5F9] rounded-xl md:rounded-2xl px-4 py-3 text-[10px] md:text-xs font-bold text-[#1E293B] outline-none focus:border-[#4F46E5] focus:bg-white transition-all appearance-none"
                 >
                   <option value="all">All Modes</option>
                   <option value="UPI">UPI</option>
@@ -262,11 +264,11 @@ const ReportsPage = () => {
               </div>
             </div>
 
-            <div className="flex items-end gap-3">
+            <div className="flex items-end gap-3 pt-2 sm:pt-0">
               <button 
                 onClick={handleGenerateReport}
                 disabled={loading}
-                className="flex-1 bg-[#4F46E5] hover:bg-[#4338CA] text-white rounded-2xl px-6 py-3 text-[10px] font-black uppercase tracking-widest shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                className="flex-1 bg-[#4F46E5] hover:bg-[#4338CA] text-white rounded-xl md:rounded-2xl px-6 py-3 text-[10px] font-black uppercase tracking-widest shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {loading ? <Loader2 size={14} className="animate-spin" /> : <Activity size={14} />}
                 Generate
@@ -274,7 +276,7 @@ const ReportsPage = () => {
               {reportData.length > 0 && (
                 <button 
                   onClick={handleDownloadPdf}
-                  className="bg-[#ECFDF5] hover:bg-[#D1FAE5] text-[#059669] rounded-2xl px-4 py-3 shadow-sm transition-all"
+                  className="bg-[#ECFDF5] hover:bg-[#D1FAE5] text-[#059669] rounded-xl md:rounded-2xl px-4 py-3 shadow-sm transition-all"
                 >
                   <Download size={18} />
                 </button>
@@ -291,12 +293,12 @@ const ReportsPage = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="bg-white rounded-[3rem] border border-[#F1F5F9] shadow-sm overflow-hidden"
+              className="bg-white rounded-2xl md:rounded-[3rem] border border-[#F1F5F9] shadow-sm overflow-hidden"
             >
-              <div className="p-8 border-b border-[#F1F5F9] flex items-center justify-between bg-[#F8FAFC]">
+              <div className="p-6 md:p-8 border-b border-[#F1F5F9] flex items-center justify-between bg-[#F8FAFC]">
                 <div className="flex items-center gap-3">
-                  <TableIcon className="text-[#4F46E5]" size={18} />
-                  <h2 className="text-xs font-black text-[#1E293B] uppercase tracking-widest">Previewing {reportData.length} Entries</h2>
+                  <TableIcon className="text-[#4F46E5]" size={16} md:size={18} />
+                  <h2 className="text-[10px] md:text-xs font-black text-[#1E293B] uppercase tracking-widest">Previewing {reportData.length} Entries</h2>
                 </div>
               </div>
 
@@ -304,57 +306,50 @@ const ReportsPage = () => {
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-[#F8FAFC]">
-                      <th className="px-8 py-4 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">Date</th>
-                      <th className="px-8 py-4 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">
+                      <th className="px-6 md:px-8 py-4 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">Date</th>
+                      <th className="px-6 md:px-8 py-4 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">
                         {reportType === 'revenue' ? 'Name' : 'Audit Detail'}
                       </th>
-                      <th className="px-8 py-4 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">Hostel Name</th>
+                      <th className="px-6 md:px-8 py-4 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">Unit</th>
                       {reportType === 'revenue' && (
-                        <th className="px-8 py-4 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">Room Num</th>
+                        <th className="px-6 md:px-8 py-4 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">Room</th>
                       )}
-                      <th className="px-8 py-4 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">Amount</th>
-                      <th className="px-8 py-4 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">Mode</th>
-                      <th className="px-8 py-4 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">Reference</th>
+                      <th className="px-6 md:px-8 py-4 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest text-right">Amount</th>
+                      <th className="px-6 md:px-8 py-4 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest text-center">Mode</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#F1F5F9]">
                     {reportData.map((row, idx) => (
                       <tr key={idx} className="hover:bg-[#F8FAFC] transition-all group">
-                        <td className="px-8 py-5 text-[10px] font-bold text-[#64748B]">
+                        <td className="px-6 md:px-8 py-5 text-[10px] font-bold text-[#64748B] whitespace-nowrap">
                           {new Date(row.date).toLocaleDateString()}
                         </td>
-                        <td className="px-8 py-5">
-                          <p className="text-[11px] font-black text-[#1E293B] group-hover:text-[#4F46E5] transition-all">
+                        <td className="px-6 md:px-8 py-5">
+                          <p className="text-[11px] font-black text-[#1E293B] group-hover:text-[#4F46E5] transition-all truncate max-w-[100px] md:max-w-none">
                             {reportType === 'revenue' ? (row.student_name || 'N/A') : (row.detail || 'N/A')}
                           </p>
                         </td>
-                        <td className="px-8 py-5">
+                        <td className="px-6 md:px-8 py-5">
                           <div className="flex items-center gap-2">
-                            <Building2 size={12} className="text-[#94A3B8]" />
-                            <span className="text-[10px] font-bold text-[#475569]">{row.hostel_name || 'N/A'}</span>
+                            <Building2 size={12} className="text-[#94A3B8] shrink-0" />
+                            <span className="text-[10px] font-bold text-[#475569] truncate max-w-[80px]">{row.hostel_name || 'N/A'}</span>
                           </div>
                         </td>
                         {reportType === 'revenue' && (
-                          <td className="px-8 py-5 text-[10px] font-bold text-[#475569]">
+                          <td className="px-6 md:px-8 py-5 text-[10px] font-bold text-[#475569]">
                             {row.room_number || 'N/A'}
                           </td>
                         )}
-                        <td className="px-8 py-5">
+                        <td className="px-6 md:px-8 py-5 text-right">
                           <span className="text-[11px] font-black text-[#1E293B]">₹{parseFloat(row.amount || '0').toLocaleString()}</span>
                         </td>
-                        <td className="px-8 py-5">
+                        <td className="px-6 md:px-8 py-5 text-center">
                           <span className={cn(
-                            "px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-tighter",
+                            "px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-tighter whitespace-nowrap",
                             row.mode === 'Cash' ? "bg-[#FFFBEB] text-[#D97706]" : "bg-[#EEF2FF] text-[#4F46E5]"
                           )}>
                             {row.mode}
                           </span>
-                        </td>
-                        <td className="px-8 py-5">
-                          <p className="text-[8px] font-black text-[#94A3B8] uppercase tracking-widest leading-tight">
-                            ID: {row.transaction_id?.substring(0, 10) || 'N/A'}<br/>
-                            RCPT: {row.receipt_id || 'N/A'}
-                          </p>
                         </td>
                       </tr>
                     ))}
@@ -367,13 +362,13 @@ const ReportsPage = () => {
               key="empty"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="bg-white p-24 rounded-[3rem] border border-dashed border-[#E2E8F0] flex flex-col items-center justify-center text-center"
+              className="bg-white p-12 md:p-24 rounded-2xl md:rounded-[3rem] border border-dashed border-[#E2E8F0] flex flex-col items-center justify-center text-center"
             >
-              <div className="w-20 h-20 bg-[#F8FAFC] rounded-full flex items-center justify-center mb-8 border border-[#F1F5F9]">
-                <FileText size={32} className="text-[#CBD5E1]" />
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-[#F8FAFC] rounded-full flex items-center justify-center mb-6 md:mb-8 border border-[#F1F5F9]">
+                <FileText size={28} md:size={32} className="text-[#CBD5E1]" />
               </div>
-              <h3 className="text-lg font-black text-[#1E293B] tracking-tight">No data available</h3>
-              <p className="text-[#94A3B8] text-[10px] font-bold uppercase tracking-[0.2em] mt-3 max-w-xs">
+              <h3 className="text-base md:text-lg font-black text-[#1E293B] tracking-tight">No data available</h3>
+              <p className="text-[#94A3B8] text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] mt-3 max-w-xs">
                 Configure your audit parameters and click generate to see preview.
               </p>
             </motion.div>
