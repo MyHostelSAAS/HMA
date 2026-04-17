@@ -66,10 +66,10 @@ const OwnerDashboard = () => {
 
     return (
       <div
-        className="group bg-white border border-[#F1F5F9] p-6 lg:p-8 rounded-[2.5rem] shadow-sm flex flex-col items-start gap-6 h-full transition-all duration-300 ease-out hover:shadow-md hover:border-[#E2E8F0] hover:-translate-y-0.5"
+        className="group bg-white border border-slate-200/60 p-6 lg:p-8 rounded-[2rem] shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] flex flex-col items-start gap-6 h-full transition-all duration-300 ease-out hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-1"
         style={{ '--card-accent': cardAccent } as React.CSSProperties}
       >
-        <div className="w-14 h-14 bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] rounded-2xl flex-shrink-0 flex items-center justify-center text-[#475569] transition-all duration-300 ease-out group-hover:scale-[1.03] group-hover:text-[color:var(--card-accent)]">
+        <div className="w-14 h-14 bg-slate-50 rounded-2xl flex-shrink-0 flex items-center justify-center text-slate-600 transition-all duration-300 ease-out group-hover:scale-[1.03] group-hover:bg-white group-hover:shadow-lg group-hover:text-[color:var(--card-accent)]">
           <Icon size={24} strokeWidth={2} aria-hidden />
         </div>
 
@@ -222,40 +222,40 @@ const OwnerDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFDFF]">
+    <div className="min-h-screen">
       {/* TOP HEADER */}
-      <header className="px-4 md:px-6 py-6 md:py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <header className="px-4 md:px-8 py-4 md:py-8 flex flex-col md:flex-row items-start md:items-center justify-between sticky top-0 z-20 gap-4 bg-[#FDFDFF]/80 backdrop-blur-md">
         <div>
-          <h1 className="text-xl md:text-2xl font-black text-[#1E293B] tracking-tight">Welcome, {user?.name || 'Captain'}</h1>
-          <p className="text-[#64748B] text-[8px] md:text-[10px] font-bold uppercase tracking-[0.2em] mt-1">Portfolio Insights & Decision Engine</p>
+          <h1 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Welcome, {user?.name || 'Captain'}</h1>
+          <p className="text-slate-400 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.2em] mt-1">Portfolio Insights & Decision Engine</p>
         </div>
         <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
           <div className="flex-1 md:flex-none">
             <HostelSelector />
           </div>
-          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#EEF2FF] flex items-center justify-center text-[#4F46E5] font-black text-xs md:text-sm shrink-0">
+          <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/20 shrink-0">
             {user?.name?.charAt(0) || 'C'}
           </div>
         </div>
       </header>
 
-      <div className="px-4 md:px-6 pb-20 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 pb-20 space-y-10 mt-8">
         {/* MONTHLY COLLECTION PROGRESS (REDESIGNED) */}
         <section className="space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-[10px] font-black text-[#94A3B8] uppercase tracking-[0.2em]">Portfolio Performance</h3>
+            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Portfolio Performance</h3>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
-    <StatCard 
-      icon={Building2} 
-      title="Total Students" 
-      value={data?.collectionProgress?.occupiedSeats || 0}
-      subValue={data?.collectionProgress?.totalSeats || 0}
-      unit="Seats"
-      progress={data?.collectionProgress?.occupancyRatio || 0}
-      color="text-[#6366f1]"
-    />
+            <StatCard 
+              icon={Building2} 
+              title="Total Students" 
+              value={data?.collectionProgress?.occupiedSeats || 0}
+              subValue={data?.collectionProgress?.totalSeats || 0}
+              unit="Seats"
+              progress={data?.collectionProgress?.occupancyRatio || 0}
+              color="text-[#6366f1]"
+            />
             <StatCard 
               icon={PieChart} 
               title="Collection Status" 
@@ -287,12 +287,12 @@ const OwnerDashboard = () => {
           </div>
         </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10">
           {/* LEFT COLUMN: SUMMARY & TREND */}
-          <div className="lg:col-span-8 space-y-8">
+          <div className="lg:col-span-8 space-y-10">
             {/* MONTHLY SUMMARY */}
             <section className="space-y-4">
-              <h3 className="text-[10px] font-black text-[#94A3B8] uppercase tracking-[0.2em]">Financial Summary</h3>
+              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Financial Summary</h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
                 <StatCard 
                   icon={Wallet} 
@@ -320,8 +320,8 @@ const OwnerDashboard = () => {
 
             {/* DAILY COLLECTION TREND */}
             <section className="space-y-4">
-              <h3 className="text-[10px] font-black text-[#94A3B8] uppercase tracking-[0.2em]">Collective Collection Analytics</h3>
-              <div className="bg-white border border-[#F1F5F9] p-6 md:p-10 rounded-2xl md:rounded-[3rem] shadow-sm h-[300px] md:h-[350px] transition-all duration-300 hover:shadow-md overflow-hidden">
+              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Collective Collection Analytics</h3>
+              <div className="bg-white border border-slate-200/60 p-6 md:p-10 rounded-[2.5rem] shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] h-[300px] md:h-[400px] transition-all duration-300 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] overflow-hidden">
                 <Line 
                   data={chartData} 
                   options={chartOptions} 
@@ -331,39 +331,39 @@ const OwnerDashboard = () => {
           </div>
 
           {/* RIGHT COLUMN: PENDING & ADVANCE */}
-          <div className="lg:col-span-4 space-y-8">
+          <div className="lg:col-span-4 space-y-10">
             {/* PENDING SUMMARY TABLE (REDESIGNED) */}
-            <section className="bg-white border border-[#F1F5F9] p-5 md:p-8 rounded-2xl md:rounded-[2.5rem] shadow-sm space-y-6">
+            <section className="bg-white border border-slate-200/60 p-6 md:p-8 rounded-[2.5rem] shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] space-y-6">
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-[#FEF2F2] rounded-xl md:rounded-2xl flex items-center justify-center text-[#EF4444] shrink-0">
-                  <AlertCircle size={20} />
+                <div className="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center shrink-0 border border-red-100">
+                  <AlertCircle size={24} />
                 </div>
                 <div>
-                  <h3 className="text-base md:text-lg font-black text-[#1E293B] tracking-tight truncate max-w-[150px] md:max-w-none">₹{data?.pending?.total?.toLocaleString() || '0'} Outstanding</h3>
-                  <p className="text-[#64748B] text-[10px] font-bold uppercase tracking-widest mt-0.5">Audit Required</p>
+                  <h3 className="text-lg font-black text-slate-900 tracking-tight truncate max-w-[150px] md:max-w-none">₹{data?.pending?.total?.toLocaleString() || '0'} Outstanding</h3>
+                  <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-0.5">Audit Required</p>
                 </div>
               </div>
               
               <div className="space-y-4 pt-4">
-                <p className="text-[9px] font-black text-[#94A3B8] uppercase tracking-widest ml-1">Delinquent Residents</p>
-                <div className="overflow-hidden rounded-xl md:rounded-2xl border border-[#F1F5F9]">
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Delinquent Residents</p>
+                <div className="overflow-hidden rounded-2xl border border-slate-100 bg-slate-50/50">
                   <div className="overflow-x-auto">
                     <table className="w-full text-left">
                       <thead>
-                        <tr className="bg-[#F8FAFC]">
-                          <th className="px-4 py-3 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">Name</th>
-                          <th className="px-4 py-3 text-[8px] font-black text-[#94A3B8] uppercase tracking-widest">Unit</th>
-                          <th className="px-4 py-3 text-[8px] font-black text-[#DC2626] uppercase tracking-widest text-right">Amount</th>
+                        <tr className="bg-slate-100/50">
+                          <th className="px-4 py-4 text-[8px] font-black text-slate-400 uppercase tracking-widest">Name</th>
+                          <th className="px-4 py-4 text-[8px] font-black text-slate-400 uppercase tracking-widest">Unit</th>
+                          <th className="px-4 py-4 text-[8px] font-black text-red-600 uppercase tracking-widest text-right">Amount</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-[#F1F5F9]">
+                      <tbody className="divide-y divide-slate-100">
                         {data?.pending?.delinquents?.map((student: any, idx: number) => (
-                          <tr key={idx} className="hover:bg-[#F8FAFC] transition-all">
-                            <td className="px-4 py-3 text-[10px] font-bold text-[#475569] truncate max-w-[80px]">{student.name}</td>
-                            <td className="px-4 py-3 text-[9px] font-bold text-[#94A3B8] uppercase">
+                          <tr key={idx} className="hover:bg-white transition-all">
+                            <td className="px-4 py-4 text-[10px] font-bold text-slate-700 truncate max-w-[80px]">{student.name}</td>
+                            <td className="px-4 py-4 text-[9px] font-bold text-slate-400 uppercase">
                               {student.hostel_name?.substring(0, 8)}.. • {student.room_no}
                             </td>
-                            <td className="px-4 py-3 text-[10px] font-black text-[#DC2626] text-right whitespace-nowrap">
+                            <td className="px-4 py-4 text-[10px] font-black text-red-600 text-right whitespace-nowrap">
                               ₹{parseFloat(student.pending_amount || 0).toLocaleString()}
                             </td>
                           </tr>
@@ -376,24 +376,24 @@ const OwnerDashboard = () => {
             </section>
 
             {/* ADVANCE PAYMENT DATA (REDESIGNED) */}
-            <section className="bg-white border border-[#F1F5F9] p-5 md:p-8 rounded-2xl md:rounded-[2.5rem] shadow-sm space-y-8">
+            <section className="bg-white border border-slate-200/60 p-6 md:p-8 rounded-[2.5rem] shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] space-y-8">
               <div className="text-center space-y-4">
-                <h3 className="text-[10px] font-black text-[#94A3B8] uppercase tracking-[0.2em]">Security Reserves</h3>
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-[#F5F3FF] rounded-xl md:rounded-2xl flex items-center justify-center text-[#7C3AED] mx-auto shadow-sm">
-                  <Wallet size={20} />
+                <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Security Reserves</h3>
+                <div className="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto border border-indigo-100/50">
+                  <Wallet size={28} />
                 </div>
-                <div className="grid grid-cols-2 gap-3 md:gap-4">
-                  <div className="text-center p-3 md:p-4 rounded-xl md:rounded-2xl bg-[#F8FAFC] border border-[#F1F5F9]">
-                    <p className="text-[8px] font-black text-[#94A3B8] uppercase tracking-widest mb-1">Total Collected</p>
-                    <p className="text-xs md:text-sm font-black text-[#1E293B]">₹{data?.advance?.totalCollected?.toLocaleString() || '0'}</p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center p-4 rounded-2xl bg-slate-50/50 border border-slate-100">
+                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Collected</p>
+                    <p className="text-sm font-black text-slate-900">₹{data?.advance?.totalCollected?.toLocaleString() || '0'}</p>
                   </div>
-                  <div className="text-center p-3 md:p-4 rounded-xl md:rounded-2xl bg-[#F0FDF4] border border-[#DCFCE7]">
-                    <p className="text-[8px] font-black text-[#059669] uppercase tracking-widest mb-1">Remaining Active</p>
-                    <p className="text-xs md:text-sm font-black text-[#065F46]">₹{data?.advance?.remainingAdvance?.toLocaleString() || '0'}</p>
+                  <div className="text-center p-4 rounded-2xl bg-emerald-50/30 border border-emerald-100/50">
+                    <p className="text-[8px] font-black text-emerald-600 uppercase tracking-widest mb-1">Remaining Active</p>
+                    <p className="text-sm font-black text-emerald-900">₹{data?.advance?.remainingAdvance?.toLocaleString() || '0'}</p>
                   </div>
                 </div>
-                <div className="flex items-center justify-center gap-2 text-[9px] font-black text-[#4F46E5] bg-[#EEF2FF] px-4 py-2 rounded-full border border-[#E0E7FF] uppercase tracking-tighter">
-                  <ShieldCheck size={12} /> Deposit Pool Verified
+                <div className="flex items-center justify-center gap-2 text-[9px] font-black text-indigo-600 bg-indigo-50 px-5 py-2.5 rounded-full border border-indigo-100 uppercase tracking-tighter">
+                  <ShieldCheck size={14} /> Deposit Pool Verified
                 </div>
               </div>
             </section>
@@ -401,22 +401,22 @@ const OwnerDashboard = () => {
         </div>
 
         {/* REPORTS & EXPORTS */}
-        <section className="space-y-4 pt-8">
-          <h3 className="text-[10px] font-black text-[#94A3B8] uppercase tracking-[0.2em]">Exports & Governance</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <section className="space-y-6 pt-10 border-t border-slate-50">
+          <h3 className="text-[10px] font-black text-[#94A3B8] uppercase tracking-[0.2em] ml-1">Exports & Governance</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
             {[
-              { label: 'Audit Log', desc: 'Portfolio Transaction PDF', icon: Download, bg: 'bg-[#EEF2FF]', iconColor: 'text-[#4F46E5]' },
-              { label: 'Fee Matrix', desc: 'Resident Status Export', icon: FileText, bg: 'bg-[#F0FDF4]', iconColor: 'text-[#10B981]' },
-              { label: 'Cost Analysis', desc: 'Operating Expense Audit', icon: PieChart, bg: 'bg-[#FFFBEB]', iconColor: 'text-[#D97706]' },
-              { label: 'Intelligence', desc: 'Portfolio Forecasts', icon: Activity, bg: 'bg-[#FDF2F8]', iconColor: 'text-[#DB2777]' },
+              { label: 'Audit Log', desc: 'Portfolio Transaction PDF', icon: Download, bg: 'bg-indigo-50/50', iconColor: 'text-indigo-600' },
+              { label: 'Fee Matrix', desc: 'Resident Status Export', icon: FileText, bg: 'bg-emerald-50/50', iconColor: 'text-emerald-600' },
+              { label: 'Cost Analysis', desc: 'Operating Expense Audit', icon: PieChart, bg: 'bg-amber-50/50', iconColor: 'text-amber-600' },
+              { label: 'Intelligence', desc: 'Portfolio Forecasts', icon: Activity, bg: 'bg-rose-50/50', iconColor: 'text-rose-600' },
             ].map((item, idx) => (
-              <div key={idx} className="bg-white border border-[#F1F5F9] p-5 md:p-6 rounded-2xl md:rounded-[2rem] shadow-sm flex items-center gap-4 group cursor-pointer hover:border-[#E2E8F0] hover:shadow-md transition-all">
-                <div className={cn("w-10 h-10 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0", item.bg, item.iconColor)}>
-                  <item.icon size={20} />
+              <div key={idx} className="bg-white border border-slate-100 p-6 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.01)] flex items-center gap-5 group cursor-pointer hover:border-indigo-100 hover:shadow-[0_20px_50px_rgb(0,0,0,0.04)] transition-all duration-500">
+                <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:scale-110", item.bg, item.iconColor)}>
+                  <item.icon size={24} />
                 </div>
                 <div className="overflow-hidden">
-                  <h4 className="text-xs font-black text-[#1E293B] tracking-tight group-hover:text-[#4F46E5] transition-all truncate">{item.label}</h4>
-                  <p className="text-[9px] font-bold text-[#94A3B8] uppercase tracking-widest mt-0.5 truncate">{item.desc}</p>
+                  <h4 className="text-sm font-black text-[#1E293B] tracking-tight group-hover:text-indigo-600 transition-all truncate">{item.label}</h4>
+                  <p className="text-[10px] font-bold text-[#94A3B8] uppercase tracking-widest mt-0.5 truncate">{item.desc}</p>
                 </div>
               </div>
             ))}
